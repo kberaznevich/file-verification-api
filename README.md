@@ -128,3 +128,6 @@ open index.html  # macOS
 xdg-open index.html  # Linux
 start index.html  # Windows
 ```
+
+### Accessing the Test Coverage Report
+#### You can find the results in the src/coverage-report directory.

@@ -1,0 +1,358 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "File Verification API Documentation",
+        "description": "File verification api",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/registration": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "description": "Registers a new user.",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful registration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "JWT token for the registered user",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserDto"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "description": "Perform user login.",
+                "operationId": "loginUser",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "JWT token for the logged in user",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserDto"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/files/verification": {
+            "post": {
+                "tags": [
+                    "File Verification"
+                ],
+                "description": "File verification.",
+                "operationId": "fileVerification",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VerifyFileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "File verification finished",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/FileVerificationResponseDto"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "UserDto": {
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the user.",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "The email of the user.",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "The password of the user.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "FileVerificationResponseDto": {
+                "required": [
+                    "issuer",
+                    "result"
+                ],
+                "properties": {
+                    "issuer": {
+                        "description": "The issuer of the file.",
+                        "type": "string"
+                    },
+                    "result": {
+                        "description": "The result of the file verification.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "BadRequestResponse": {
+                "type": "object",
+                "example": {
+                    "code:": 400,
+                    "message": "Bad request"
+                }
+            },
+            "UnauthorizedResponse": {
+                "type": "object",
+                "example": {
+                    "code:": 401,
+                    "message": "This action is unauthorized"
+                }
+            },
+            "ForbiddenResponse": {
+                "type": "object",
+                "example": {
+                    "code:": 403,
+                    "message": "Invalid credentials"
+                }
+            },
+            "NotFoundResponse": {
+                "type": "object",
+                "example": {
+                    "code:": 404,
+                    "message": "Resource not found"
+                }
+            },
+            "ValidationErrorResponse": {
+                "type": "object",
+                "example": {
+                    "code:": 422,
+                    "message": "Validation error"
+                }
+            },
+            "InternalServerErrorResponse": {
+                "type": "object",
+                "example": {
+                    "code:": 500,
+                    "message": "Server error"
+                }
+            },
+            "LoginUserRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "description": "The email of the user.",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "The password of the user.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterUserRequest": {
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the user.",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "The email of the user.",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "The password of the user.",
+                        "type": "string"
+                    },
+                    "password_confirmation": {
+                        "description": "The password confirmation.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "VerifyFileRequest": {
+                "required": [
+                    "file"
+                ],
+                "properties": {
+                    "file": {
+                        "description": "The file to be verified.",
+                        "type": "file"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "File Verification",
+            "description": "File Verification"
+        }
+    ]
+}
