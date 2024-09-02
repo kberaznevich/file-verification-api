@@ -101,3 +101,30 @@ docker exec file-verification-api-php php artisan l5-swagger:generate
 4. Fill in the required parameters.
 5. Click the "Execute" button to send a request to the API.
 6. View the response directly in the Swagger UI.
+
+## Running Tests and Generating Code Coverage Report
+
+### Running the Tests
+#### To run all the tests in the project, use the following command:
+
+```bash
+docker exec file-verification-api-php php artisan test
+```
+
+#### This will execute all unit and feature tests and display the results in your terminal.
+
+### Generating a Code Coverage Report
+#### To generate a code coverage report, which provides insights into how much of your codebase is covered by tests, use the following command:
+
+```bash
+docker exec file-verification-api-php php artisan test --coverage-html=/var/www/html/coverage-report
+```
+
+### Viewing the Coverage Report
+#### Once the report is generated, you can view it by opening the index.html file located in the coverage-report folder. To view the report open the index.html file in your web browser:
+
+```bash
+open index.html  # macOS
+xdg-open index.html  # Linux
+start index.html  # Windows
+```
