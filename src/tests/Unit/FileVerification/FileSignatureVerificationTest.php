@@ -7,12 +7,21 @@ namespace Tests\Unit\FileVerification;
 use App\Dto\FileVerification\FileContent\FileContentDto;
 use App\Enums\FileVerification\FileVerificationStatus;
 use App\Exceptions\FileVerification\FileVerificationException;
+use App\Services\FileVerification\VerificationResult;
 use App\Validators\FileVerification\SignatureValidator;
+use FakeData\FakeFileVerificationResultService;
 use Mockery;
 use Tests\TestCase;
 
 final class FileSignatureVerificationTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->app->bind(VerificationResult::class, FakeFileVerificationResultService::class);
+    }
+
     function test_valid_file_signature_verified()
     {
         $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');

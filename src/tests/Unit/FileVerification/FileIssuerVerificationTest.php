@@ -6,7 +6,9 @@ namespace Tests\Unit\FileVerification;
 
 use App\Dto\FileVerification\FileContent\FileContentDto;
 use App\Exceptions\FileVerification\FileVerificationException;
+use App\Services\FileVerification\VerificationResult;
 use App\Validators\FileVerification\IssuerValidator;
+use FakeData\FakeFileVerificationResultService;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Response;
@@ -17,6 +19,13 @@ use Tests\TestCase;
 
 final class FileIssuerVerificationTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->app->bind(VerificationResult::class, FakeFileVerificationResultService::class);
+    }
+
     public function test_valid_file_issuer_verified()
     {
         $logger = Mockery::mock(LoggerInterface::class);

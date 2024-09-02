@@ -6,13 +6,11 @@ namespace App\Http\Controllers\FileVerification;
 
 use App\Dto\FileVerification\FileContent\FileContentDto;
 use App\Dto\FileVerification\FileVerificationResult\FileVerificationResponseDto;
-use App\Dto\FileVerification\FileVerificationResult\FileVerificationResultDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileVerification\VerifyFileRequest;
-use App\Models\FileVerificationResult;
+use App\Services\FileVerification\FileVerificationResultService;
 use App\Services\FileVerification\FileVerificationService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +19,7 @@ final class FileVerificationController extends Controller
 {
     public function __construct(
         private readonly FileVerificationService $verificationService,
+        private readonly FileVerificationResultService $verificationResultService,
     )
     {
     }
@@ -70,10 +69,7 @@ final class FileVerificationController extends Controller
         $fileContent = File::get($request->file('file')->getRealPath());
         $dto = FileContentDto::from(json_decode($fileContent, true));
         $result = $this->verificationService->verify($dto);
-
-        FileVerificationResult::create(
-            (new FileVerificationResultDto(Auth::user()->id, $result))->toArray()
-        );
+        $this->verificationResultService->saveVerificationResult($result);
 
         return response()->json(
             new FileVerificationResponseDto(
