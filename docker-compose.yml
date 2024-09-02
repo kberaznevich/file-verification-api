@@ -32,5 +32,6 @@ services:
       - mysql
     volumes:
       - ./src:/var/www/html
+      - ./docker/php/config/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     depends_on:
       - mysql
