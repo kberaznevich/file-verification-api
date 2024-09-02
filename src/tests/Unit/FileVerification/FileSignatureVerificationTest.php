@@ -15,7 +15,7 @@ final class FileSignatureVerificationTest extends TestCase
 {
     function test_valid_file_signature_verified()
     {
-        $fileDto = FileContentDto::fromFile('app/test-files/valid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');
         $closureCalled = false;
 
         $next = function () use (&$closureCalled) {
@@ -36,13 +36,14 @@ final class FileSignatureVerificationTest extends TestCase
 
     function test_invalid_file_signature_not_verified()
     {
-        $fileDto = FileContentDto::fromFile('app/test-files/invalid.json');
-        $validator = Mockery::mock(SignatureValidator::class);
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/invalid-signature.json');
+        $fileDto->signature->targetHash = '12345';
 
+        $validator = Mockery::mock(SignatureValidator::class);
         $validator->shouldReceive('validate')
             ->once()
             ->with($fileDto, Mockery::type('Closure'))
-            ->andThrow(new FileVerificationException('issuer', FileVerificationStatus::InvalidIssuer->value));
+            ->andThrow(new FileVerificationException('issuer', FileVerificationStatus::InvalidSignature->value));
 
         $this->expectException(FileVerificationException::class);
 

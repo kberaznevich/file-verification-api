@@ -13,7 +13,7 @@ final class FileContentDto extends Data
 
     public static function fromFile(string $path): FileContentDto
     {
-        $jsonData = file_get_contents(storage_path($path));
+        $jsonData = file_get_contents(base_path($path));
         $dataArray = json_decode($jsonData, true);
 
         return FileContentDto::from($dataArray);

@@ -32,7 +32,7 @@ final class FileIssuerVerificationTest extends TestCase
             ->once()
             ->andReturn(new Response(200, [], json_encode($dnsResponseMock)));
 
-        $fileDto = FileContentDto::fromFile('app/test-files/valid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');
         $fileDto->data->issuer->identityProof->key = 'expected-key';
 
         $next = function ($fileDto) {
@@ -58,7 +58,7 @@ final class FileIssuerVerificationTest extends TestCase
             ->once()
             ->andReturn(new Response(200, [], json_encode($dnsResponseMock)));
 
-        $fileDto = FileContentDto::fromFile('app/test-files/invalid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');
 
         $this->expectException(FileVerificationException::class);
 
@@ -71,7 +71,7 @@ final class FileIssuerVerificationTest extends TestCase
         $logger = Mockery::mock(LoggerInterface::class);
         $httpClient = Mockery::mock(ClientInterface::class);
 
-        $fileDto = FileContentDto::fromFile('app/test-files/invalid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');
         $fileDto->data->issuer->name = '';
 
         $this->expectException(FileVerificationException::class);
@@ -85,7 +85,7 @@ final class FileIssuerVerificationTest extends TestCase
         $logger = Mockery::mock(LoggerInterface::class);
         $httpClient = Mockery::mock(ClientInterface::class);
 
-        $fileDto = FileContentDto::fromFile('app/test-files/invalid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');
         $fileDto->data->issuer->identityProof->key = '';
 
         $this->expectException(FileVerificationException::class);
@@ -108,7 +108,7 @@ final class FileIssuerVerificationTest extends TestCase
         $httpClient->shouldReceive('get')
             ->andThrowExceptions([new TransferException()]);
 
-        $fileDto = FileContentDto::fromFile('app/test-files/valid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');
 
         $this->expectException(FileVerificationException::class);
 

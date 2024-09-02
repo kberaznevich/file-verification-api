@@ -15,7 +15,7 @@ final class FileRecipientVerificationTest extends TestCase
 {
     function test_valid_file_recipient_verified()
     {
-        $fileDto = FileContentDto::fromFile('app/test-files/valid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/valid.json');
         $closureCalled = false;
 
         $next = function () use (&$closureCalled) {
@@ -36,7 +36,7 @@ final class FileRecipientVerificationTest extends TestCase
 
     function test_invalid_file_recipient_not_verified()
     {
-        $fileDto = FileContentDto::fromFile('app/test-files/invalid.json');
+        $fileDto = FileContentDto::fromFile('tests/FakeData/FileVerification/invalid-recipient.json');
 
         $validator = Mockery::mock(RecipientValidator::class);
         $validator->shouldReceive('validate')

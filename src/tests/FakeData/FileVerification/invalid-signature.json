@@ -18,6 +18,6 @@
     },
     "signature": {
         "type": "SHA3MerkleProof",
-        "targetHash": "12345288f94aadadf486cfdad84b9f4305f7d51eac62db18376d48180cc1dd2047a0e000"
+        "targetHash": "1233456288f94aadadf486cfdad84b9f4305f7d51eac62db18376d48180cc1dd2047a0e"
     }
 }
